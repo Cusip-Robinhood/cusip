@@ -1,6 +1,7 @@
 # CUSIP (`$CUSIP`) — AI SEC EDGAR Indexer on Robinhood Chain
 
 - **Terminal:** https://cusipstocks.com
+- **X:** https://x.com/cusiprobinhood
 - **Source:** https://github.com/Cusip-Robinhood/cusip
 
 **CUSIP** is an autonomous AI data intelligence and SEC EDGAR indexing engine that resolves public corporate disclosures (**Form 4**, **Schedule 13D/13G**, and **Form 13F-HR**) directly to **203 live ERC-20 stock tokens** on **Robinhood Chain (`4663`)** via their canonical 9-character CUSIP security identifier.
