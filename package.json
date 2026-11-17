@@ -1,0 +1,24 @@
+{
+  "name": "cusip",
+  "version": "1.0.0",
+  "description": "CUSIP: Autonomous AI SEC EDGAR (Form 4, 13D/G, 13F-HR) indexing engine & CUSIP-to-ERC20 stock token terminal on Robinhood Chain (4663).",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cusip-Robinhood/cusip.git"
+  },
+  "homepage": "https://cusipstocks.com",
+  "scripts": {
+    "compile": "node contracts/compile.mjs",
+    "test": "node contracts/test.mjs",
+    "sync:edgar": "node scripts/sync-edgar.mjs",
+    "dev": "node worker/dev-server.mjs",
+    "test:api": "node worker/test-api.mjs"
+  },
+  "devDependencies": {
+    "solc": "^0.8.24",
+    "viem": "^2.21.0",
+    "wrangler": "^4.0.0"
+  }
+}

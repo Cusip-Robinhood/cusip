@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 500" width="1500" height="500">
+  <defs>
+    <linearGradient id="hdrBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06090d"/>
+      <stop offset="55%" stop-color="#0d141d"/>
+      <stop offset="100%" stop-color="#071310"/>
+    </linearGradient>
+    <pattern id="gridPat" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="1" stroke-opacity="0.45"/>
+    </pattern>
+  </defs>
+  <rect width="1500" height="500" fill="url(#hdrBg)"/>
+  <rect width="1500" height="500" fill="url(#gridPat)"/>
+
+  <!-- Subtle Glow -->
+  <circle cx="260" cy="250" r="240" fill="#10b981" fill-opacity="0.08"/>
+  <circle cx="1260" cy="140" r="210" fill="#f59e0b" fill-opacity="0.06"/>
+
+  <!-- Left Mark -->
+  <g transform="translate(88, 70) scale(0.9)">
+    
+  <defs>
+    <linearGradient id="bgPlate" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#111923"/>
+      <stop offset="100%" stop-color="#070a0e"/>
+    </linearGradient>
+    <linearGradient id="emGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="60%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="amberAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded Institutional Vault Tile -->
+  <rect x="20" y="20" width="360" height="360" rx="64" fill="url(#bgPlate)" stroke="#1f2d3d" stroke-width="8"/>
+  <rect x="38" y="38" width="324" height="324" rx="48" fill="none" stroke="#10b981" stroke-opacity="0.22" stroke-width="2.5"/>
+
+  <!-- Architectural C-Bracket framing the 9-char CUSIP Matrix -->
+  <path d="M276 106 H134 C106 106, 92 120, 92 148 V252 C92 280, 106 294, 134 294 H276"
+        fill="none" stroke="#e2e8f0" stroke-width="26" stroke-linecap="square" stroke-linejoin="miter"/>
+
+  <!-- 6-2-1 CUSIP Bit Matrix inside the C-Frame (6 Issuer bars + 2 Issue bars + Check-Digit Diamond) -->
+  <!-- Row 1: 6 Issuer Slots -->
+  <rect x="138" y="156" width="16" height="36" rx="3" fill="url(#emGlow)"/>
+  <rect x="160" y="156" width="16" height="36" rx="3" fill="url(#emGlow)"/>
+  <rect x="182" y="156" width="16" height="36" rx="3" fill="#334155"/>
+  <rect x="204" y="156" width="16" height="36" rx="3" fill="url(#emGlow)"/>
+  <rect x="226" y="156" width="16" height="36" rx="3" fill="url(#emGlow)"/>
+  <rect x="248" y="156" width="16" height="36" rx="3" fill="#334155"/>
+
+  <!-- Row 2: 2 Issue Slots + Separator + Check-Digit Emerald Diamond -->
+  <rect x="138" y="208" width="28" height="36" rx="3" fill="#94a3b8"/>
+  <rect x="174" y="208" width="28" height="36" rx="3" fill="url(#emGlow)"/>
+  <rect x="212" y="222" width="14" height="8" rx="2" fill="#64748b"/>
+
+  <!-- 9th Check-Digit Verification Prism (Right Anchor) -->
+  <polygon points="296,164 334,200 296,236 258,200" fill="url(#emGlow)" stroke="#070a0e" stroke-width="6"/>
+  <polygon points="296,182 314,200 296,218 278,200" fill="#ecfdf5"/>
+
+  <!-- Top-Right Off-Hours 24/7 Beacon Dot -->
+  <circle cx="322" cy="94" r="11" fill="url(#amberAccent)"/>
+
+  </g>
+
+  <!-- Center-Right Typography -->
+  <text x="490" y="152" fill="#10b981" font-family="Consolas, 'Courier New', monospace" font-size="21" font-weight="700" letter-spacing="3">CUSIPSTOCKS.COM · ROBINHOOD CHAIN 4663</text>
+  <text x="490" y="236" fill="#f8fafc" font-family="Arial, Helvetica, sans-serif" font-size="76" font-weight="800" letter-spacing="-1">CUSIP <tspan fill="#10b981" font-size="44" font-family="Consolas, monospace">$CUSIP</tspan></text>
+  <text x="490" y="294" fill="#94a3b8" font-family="Arial, Helvetica, sans-serif" font-size="26">9-Char SEC Filings (Form 4 · 13D/G · 13F-HR) &#8594; 24/7 Onchain Stock Tokens</text>
+
+  <!-- Live Stat Chips -->
+  <g transform="translate(490, 336)">
+    <rect x="0" y="0" width="280" height="68" rx="8" fill="#111923" stroke="#1f2d3d" stroke-width="2"/>
+    <text x="20" y="28" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">OFF-HOURS SEC FILINGS</text>
+    <text x="20" y="54" fill="#fbbf24" font-family="Consolas, monospace" font-size="24" font-weight="700">95.8% AFTER BELL</text>
+
+    <rect x="298" y="0" width="280" height="68" rx="8" fill="#111923" stroke="#1f2d3d" stroke-width="2"/>
+    <text x="318" y="28" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">10B5-1 NOISE STRIPPED</text>
+    <text x="318" y="54" fill="#e2e8f0" font-family="Consolas, monospace" font-size="24" font-weight="700">75.3% FILTERED</text>
+
+    <rect x="596" y="0" width="310" height="68" rx="8" fill="#111923" stroke="#10b981" stroke-opacity="0.5" stroke-width="2"/>
+    <text x="616" y="28" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">CHAIN 4663 EQUITIES</text>
+    <text x="616" y="54" fill="#10b981" font-family="Consolas, monospace" font-size="24" font-weight="700">203 ERC-20 MAPPED</text>
+  </g>
+</svg>
