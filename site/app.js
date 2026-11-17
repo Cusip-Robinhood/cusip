@@ -1,4 +1,4 @@
-// CUSIP ($CUSIP) Frontend Terminal — SEC EDGAR AI Signal Desk, 24/7 Off-Hours Gap Scanner,
+// CUSIP ($CUSIPS) Frontend Terminal — SEC EDGAR AI Signal Desk, 24/7 Off-Hours Gap Scanner,
 // 13F Institutional Redline Books, Multicall3 Read-Only Wallet Rebalancer, and Onchain CusipRegistry Queue.
 
 const EMBEDDED_CUSIP_CA = "";
@@ -77,7 +77,7 @@ function syncProBadge() {
   const banner = document.getElementById("freemiumBanner");
   if (state.proUnlocked) {
     badge.className = "pro-pill unlocked";
-    badge.textContent = `PRO UNLOCKED (${Math.round(state.holderBalance).toLocaleString()} $CUSIP)`;
+    badge.textContent = `PRO UNLOCKED (${Math.round(state.holderBalance).toLocaleString()} $CUSIPS)`;
     if (banner) banner.style.display = "none";
   } else {
     badge.className = "pro-pill locked";
@@ -149,7 +149,7 @@ function renderWireTable() {
           </td>
           <td class="num">${sig.valueUsd > 0 ? fmtUsd(sig.valueUsd) : "5%+ Stake"}</td>
           <td><span class="mono-tag">${esc(sig.session)} (${esc(sig.etTime)})</span></td>
-          <td><button type="button" class="btn-micro js-open-drawer">Hold 500K $CUSIP</button></td>
+          <td><button type="button" class="btn-micro js-open-drawer">Hold 500K $CUSIPS</button></td>
         </tr>`;
       }
 
@@ -232,7 +232,7 @@ function renderGapScanner() {
           <td><span class="sym-strong">LOCKED</span> <span class="cusip-chip">${esc(s.cusip.slice(0, 3))}•••</span></td>
           <td>${esc(s.role)}</td>
           <td class="num">${fmtUsd(s.valueUsd)}</td>
-          <td><span class="mono-tag">Hold 500K $CUSIP</span></td>
+          <td><span class="mono-tag">Hold 500K $CUSIPS</span></td>
         </tr>`;
       }
       return `<tr>
@@ -392,7 +392,7 @@ async function renderRebalanceView() {
           <td class="num">${pos.normalizedOnchainWeightPct.toFixed(2)}%</td>
           <td class="num">—</td>
           <td class="num">${fmtUsd(tgt)}</td>
-          <td class="num"><span class="mono-tag">Hold 500K $CUSIP</span></td>
+          <td class="num"><span class="mono-tag">Hold 500K $CUSIPS</span></td>
           <td>—</td>
         </tr>`;
       }
@@ -538,7 +538,7 @@ async function verifyHolderAddress(addr) {
     statusEl.textContent = "Please enter a valid 0x wallet address.";
     return;
   }
-  statusEl.textContent = "Checking $CUSIP balance on Robinhood Chain (4663)...";
+  statusEl.textContent = "Checking $CUSIPS balance on Robinhood Chain (4663)...";
   try {
     const r = await fetch(`/v1/status?wallet=${encodeURIComponent(clean)}`);
     const j = await r.json();
@@ -552,11 +552,11 @@ async function verifyHolderAddress(addr) {
     renderRebalanceView();
 
     if (!j.access?.tokenLaunched) {
-      statusEl.textContent = `Wallet ${shortAddr(clean)} saved. $CUSIP launches on Pons shortly — Pro threshold (500,000 $CUSIP) activates automatically once the token contract is bound.`;
+      statusEl.textContent = `Wallet ${shortAddr(clean)} saved. $CUSIPS launches on Pons shortly — Pro threshold (500,000 $CUSIPS) activates automatically once the token contract is bound.`;
     } else if (state.proUnlocked) {
-      statusEl.textContent = `Verified: ${state.holderBalance.toLocaleString()} $CUSIP held (>= ${PRO_THRESHOLD.toLocaleString()}). Real-time <24h EDGAR wire & full 13F rebalance unlocked.`;
+      statusEl.textContent = `Verified: ${state.holderBalance.toLocaleString()} $CUSIPS held (>= ${PRO_THRESHOLD.toLocaleString()}). Real-time <24h EDGAR wire & full 13F rebalance unlocked.`;
     } else {
-      statusEl.textContent = `Balance: ${state.holderBalance.toLocaleString()} $CUSIP. Hold >= ${PRO_THRESHOLD.toLocaleString()} $CUSIP on Robinhood Chain to unlock real-time <24h filings.`;
+      statusEl.textContent = `Balance: ${state.holderBalance.toLocaleString()} $CUSIPS. Hold >= ${PRO_THRESHOLD.toLocaleString()} $CUSIPS on Robinhood Chain to unlock real-time <24h filings.`;
     }
   } catch (err) {
     statusEl.textContent = `Verification check error: ${err.message}`;

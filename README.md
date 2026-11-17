@@ -1,4 +1,4 @@
-# CUSIP (`$CUSIP`) — AI SEC EDGAR Indexer on Robinhood Chain
+# CUSIP (`$CUSIPS`) — AI SEC EDGAR Indexer on Robinhood Chain
 
 - **Terminal:** https://cusipstocks.com
 - **X:** https://x.com/cusiprobinhood
@@ -12,9 +12,9 @@
 2. **75.3% `10b5-1` Noise Stripping (`198 / 263` Form 4s):** Three-quarters of raw Form 4 filings are pre-arranged `Rule 10b5-1` sales scheduled months in advance. CUSIP separates routine sales from discretionary open-market buys (`Code P`) and multi-insider **Cluster Buys** (`$APLD`, `$GLXY`, `$BA`, `$NBIS`).
 3. **13F Institutional Sleeve Replication:** Computes exact tokenizable coverage across 6 major 13F books (up to `82.7%` for Appaloosa Management) and calculates read-only `Multicall3` wallet similarity + USD rebalance legs.
 
-## `$CUSIP` Token Utility & Onchain Architecture
+## `$CUSIPS` Token Utility & Onchain Architecture
 
-- **Non-Custodial Pro Gate (`500,000 $CUSIP`, `0.05%` of supply):** Archive filings (`>24h`) are open to everyone. Holding `>= 500,000 $CUSIP` on Robinhood Chain (checked read-only via `balanceOf`, zero custody or approvals) unlocks `<24h` real-time EDGAR signals, off-hours gap alerts, and full 15-leg 13F rebalance plans.
+- **Non-Custodial Pro Gate (`500,000 $CUSIPS`, `0.05%` of supply):** Archive filings (`>24h`) are open to everyone. Holding `>= 500,000 $CUSIPS` on Robinhood Chain (checked read-only via `balanceOf`, zero custody or approvals) unlocks `<24h` real-time EDGAR signals, off-hours gap alerts, and full 15-leg 13F rebalance plans.
 - **`CusipRegistry.sol` (Sourcify `exact_match` on Chain `4663`):** Stores canonical `bytes9 cusip -> address stockToken` records, cryptographic `keccak256` snapshot attestations (`attestSnapshot`), and the holder-gated `requestCikIndex(cik, is13F, entityName)` + `boostCikPriority` burn queue.
 - **AI Agent & MCP Feed (`/v1/mcp/manifest.json`):** Machine-readable JSON & MCP endpoints for autonomous agents querying CUSIP-to-ERC20 mappings, off-hours Form 4 signals, and 13F rebalance plans.
 
