@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" data-page="token">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>$CUSIPS Token Utility, Sourcify CusipRegistry.sol & MCP API — CUSIP</title>
+  <meta name="description" content="Inspect $CUSIPS holder mechanics (500,000 $CUSIPS non-custodial Pro gate), Sourcify exact_match verified CusipRegistry.sol on Robinhood Chain (4663), and AI/MCP endpoints." />
+  <meta property="og:title" content="$CUSIPS Token Utility, Sourcify CusipRegistry.sol & MCP API — CUSIP" />
+  <meta property="og:description" content="Inspect $CUSIPS holder mechanics (500,000 $CUSIPS non-custodial Pro gate), Sourcify exact_match verified CusipRegistry.sol on Robinhood Chain (4663), and AI/MCP endpoints." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://cusipstocks.com/token.html" />
+  <meta property="og:image" content="https://cusipstocks.com/og-card.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@cusiprobinhood" />
+  <meta name="twitter:title" content="$CUSIPS Token Utility, Sourcify CusipRegistry.sol & MCP API — CUSIP" />
+  <meta name="twitter:description" content="Inspect $CUSIPS holder mechanics (500,000 $CUSIPS non-custodial Pro gate), Sourcify exact_match verified CusipRegistry.sol on Robinhood Chain (4663), and AI/MCP endpoints." />
+  <meta name="twitter:image" content="https://cusipstocks.com/og-card.png" />
+  <link rel="canonical" href="https://cusipstocks.com/token.html" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <!-- Live Institutional Session & Contract Strip -->
+  <div class="top-strip">
+    <div class="wrap strip-inner">
+      <div class="strip-left">
+        <span class="pulse-dot"></span>
+        <span class="mono-tag">CHAIN 4663 · 24/7 SETTLEMENT</span>
+        <span class="sep">|</span>
+        <span id="usSessionBadge" class="session-pill">US EQUITIES: CHECKING ET...</span>
+        <span class="sep hide-sm">|</span>
+        <span class="strip-stat hide-sm"><strong>95.8%</strong> Form 4s filed off-hours</span>
+        <span class="sep hide-md">|</span>
+        <span class="strip-stat hide-md"><strong>75.3%</strong> 10b5-1 noise stripped</span>
+      </div>
+      <div class="strip-right">
+        <span class="ca-label">$CUSIPS CA:</span>
+        <code id="headerCaText" class="ca-code">0x01db7687276EAe013F287edcb904960116462357</code>
+        <button id="copyCaBtn" class="btn-micro" type="button">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multi-Page Site Header -->
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="/" class="brand-lockup">
+        <img src="/mark.svg" alt="CUSIP mark" class="brand-mark" width="38" height="38" />
+        <div>
+          <div class="brand-title">CUSIP <span class="brand-ticker">$CUSIPS</span></div>
+          <div class="brand-sub">SEC EDGAR AI Indexer · Robinhood Chain</div>
+        </div>
+      </a>
+
+      <nav class="desk-tabs" aria-label="Primary Navigation">
+        <a href="/" class="tab-btn">Form 4 Wire</a>
+        <a href="/gap" class="tab-btn">24/7 Off-Hours</a>
+        <a href="/books" class="tab-btn">13F Fund Books</a>
+        <a href="/rebalance" class="tab-btn">Wallet & Rebalance</a>
+        <a href="/directory" class="tab-btn">203 Stock Tokens</a>
+        <a href="/token" class="tab-btn active">$CUSIPS & Registry</a>
+      </nav>
+
+      <div class="pro-wallet-box">
+        <a href="https://x.com/cusiprobinhood" target="_blank" rel="noopener" class="btn-outline">X · @cusiprobinhood</a>
+        <a href="https://github.com/Cusip-Robinhood/cusip" target="_blank" rel="noopener" class="btn-outline hide-sm">GitHub</a>
+        <div id="proBadge" class="pro-pill locked" title="Hold 500,000 $CUSIPS on Robinhood Chain (read-only balanceOf) to unlock <24h live EDGAR filings & full 13F rebalance execution.">
+          FREE · &gt;24H
+        </div>
+        <button type="button" id="verifyHolderBtn" class="btn-outline">Verify $CUSIPS</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Shared Non-Custodial Holder Verifier Drawer -->
+  <section id="holderDrawer" class="holder-drawer hidden">
+    <div class="wrap drawer-inner">
+      <div class="drawer-copy">
+        <h3>Non-Custodial <code>$CUSIPS</code> Pro Verification</h3>
+        <p>Paste any Robinhood Chain wallet or connect MetaMask/Rabby. We only call <code>balanceOf</code> on chain <code>4663</code> — zero approvals, zero signatures, zero custody. Holding <strong>&ge; 500,000 $CUSIPS</strong> (0.05% of supply) unlocks real-time <code>&lt;24h</code> Form 4 signals, full 15-leg 13F rebalance plans, and onchain CIK indexing requests.</p>
+      </div>
+      <div class="drawer-controls">
+        <input id="holderWalletInput" type="text" class="mono-input" placeholder="0x... Robinhood Chain wallet address" spellcheck="false" />
+        <button type="button" id="checkBalanceBtn" class="btn-primary">Check Balance</button>
+        <button type="button" id="connectWalletBtn" class="btn-secondary">Connect EVM</button>
+      </div>
+      <div id="holderCheckStatus" class="drawer-status"></div>
+    </div>
+  </section>
+
+  <section class="page-banner">
+    <div class="wrap">
+      <div class="eyebrow">NON-CUSTODIAL UTILITY · SOURCIFY EXACT_MATCH ON CHAIN 4663</div>
+      <h1><code>$CUSIPS</code> Token Mechanics &amp; Onchain Registry</h1>
+      <p class="hero-lead">Zero staking lockups, zero token approvals for terminal access. Pro intelligence features check your live <code>$CUSIPS</code> balance directly on Robinhood Chain via <code>balanceOf</code>, while <code>CusipRegistry.sol</code> anchors CUSIP mappings and holder CIK requests onchain.</p>
+    </div>
+  </section>
+
+  <main class="wrap main-desk">
+    <div class="registry-grid">
+      <div class="card">
+        <div class="eyebrow">WHY TRADERS &amp; QUANTS HOLD $CUSIPS</div>
+        <h2>Four Concrete Holder Edges</h2>
+        <ul class="spec-list">
+          <li><strong>1. Real-Time &lt;24h EDGAR Wire &amp; Off-Hours Alerts:</strong> Guests browse the verified <code>&gt;24h</code> archive free. Holding <strong>500,000 $CUSIPS</strong> (<code>0.05%</code> of 1B fixed supply, verified read-only via <code>balanceOf</code>) unlocks zero-delay Form 4 filings and off-hours gap signals the moment they hit EDGAR.</li>
+          <li><strong>2. Full 15-Leg 13F Rebalance Matrix:</strong> Unlocks all token-by-token <code>BUY / TRIM</code> deltas and share-multiplier adjustments on <a href="/rebalance">Wallet &amp; Rebalance</a>.</li>
+          <li><strong>3. Onchain <code>CusipRegistry.sol</code> CIK Queue:</strong> Holders invoke <code>requestCikIndex(cik, is13F, entityName)</code> directly on chain <code>4663</code> (and optionally burn <code>$CUSIPS</code> to <code>0x...dEaD</code> via <code>boostCikPriority</code>) to enqueue new hedge funds or issuers into our EDGAR indexer.</li>
+          <li><strong>4. AI Agent &amp; MCP Data Endpoints:</strong> Autonomous trading agents query <code>/v1/equities</code>, <code>/v1/signals</code>, and <code>/v1/mcp/manifest.json</code> directly with holder wallet verification for machine-readable EDGAR conviction feeds.</li>
+        </ul>
+
+        <div class="contract-meta-box">
+          <div><span>$CUSIPS Token (4663):</span> <code id="regTokenCa">0x01db7687276EAe013F287edcb904960116462357</code></div>
+          <div><span>CusipRegistry (Sourcify exact_match):</span> <a href="https://robinhoodchain.blockscout.com/address/0x413c216228d4559daf2af1723a73f16613d586a7" target="_blank" rel="noopener"><code id="regContractAddr">0x413c216228d4559daf2af1723a73f16613d586a7</code></a> &middot; <a href="https://repo.sourcify.dev/4663/0x413c216228d4559daf2af1723a73f16613d586a7" target="_blank" rel="noopener">Sourcify Proof</a></div>
+          <div><span>Snapshot Root (keccak256):</span> <code id="regSnapshotRoot">Loading...</code></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="eyebrow">ONCHAIN HOLDER QUEUE · CUSIPREGISTRY.SOL</div>
+        <h2>Enqueue SEC CIK Onchain</h2>
+        <p class="card-sub">Submit any 10-digit SEC Central Index Key (e.g. <code>0001061768</code> Baupost, <code>0001037389</code> Renaissance, <code>0001167483</code> Tiger Global) directly to <code>CusipRegistry.requestCikIndex</code> on Robinhood Chain.</p>
+
+        <form id="cikRequestForm" class="stack-form">
+          <label>
+            <span>SEC CIK Number</span>
+            <input id="cikNumberInput" type="text" class="mono-input" placeholder="0001037389" required />
+          </label>
+          <label>
+            <span>Fund or Issuer Name</span>
+            <input id="cikNameInput" type="text" class="mono-input" placeholder="Renaissance Technologies LLC" required maxlength="80" />
+          </label>
+          <label class="row-check">
+            <input id="cikIs13FInput" type="checkbox" checked />
+            <span>Institutional 13F-HR Manager (uncheck for Corporate Form 4 Issuer)</span>
+          </label>
+          <button type="submit" class="btn-primary">Submit Onchain via Wallet (4663)</button>
+          <div id="cikTxStatus" class="drawer-status"></div>
+        </form>
+
+        <div class="api-box">
+          <div class="eyebrow">AI AGENT &amp; MCP ENDPOINTS</div>
+          <pre class="code-block">GET  /v1/status
+GET  /v1/equities?q=458140100
+GET  /v1/signals?type=buy&amp;discretionary=true&amp;wallet=0x...
+POST /v1/rebalance
+GET  /v1/mcp/manifest.json</pre>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p><strong>CUSIP ($CUSIPS)</strong> indexes public SEC EDGAR disclosures (Form 4, Schedule 13D/13G, Form 13F-HR) and maps 9-character CUSIP identifiers to ERC-20 stock tokens on Robinhood Chain (4663). Read-only analytical software; not investment advice. Unaffiliated with the SEC, CUSIP Global Services, Robinhood, or any listed issuer.</p>
+      <div class="footer-links">
+        <a href="/">Wire</a>
+        <a href="/gap">Off-Hours</a>
+        <a href="/books">13F Books</a>
+        <a href="/rebalance">Rebalance</a>
+        <a href="/directory">Directory</a>
+        <a href="/token">$CUSIPS</a>
+        <a href="https://github.com/Cusip-Robinhood/cusip" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://x.com/cusiprobinhood" target="_blank" rel="noopener">X (@cusiprobinhood)</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

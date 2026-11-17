@@ -10,6 +10,7 @@
   },
   "homepage": "https://cusipstocks.com",
   "scripts": {
+    "build": "node build.mjs",
     "compile": "node contracts/compile.mjs",
     "test": "node contracts/test.mjs",
     "sync:edgar": "node scripts/sync-edgar.mjs",

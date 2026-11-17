@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-page="rebalance">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wallet Match & 13F Rebalance Calculator — CUSIP ($CUSIPS)</title>
+  <meta name="description" content="Scan any Robinhood Chain wallet via read-only Multicall3 across 203 stock tokens, measure cosine similarity to billionaire 13F books, and compute exact USD rebalance legs." />
+  <meta property="og:title" content="Wallet Match & 13F Rebalance Calculator — CUSIP ($CUSIPS)" />
+  <meta property="og:description" content="Scan any Robinhood Chain wallet via read-only Multicall3 across 203 stock tokens, measure cosine similarity to billionaire 13F books, and compute exact USD rebalance legs." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://cusipstocks.com/rebalance.html" />
+  <meta property="og:image" content="https://cusipstocks.com/og-card.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@cusiprobinhood" />
+  <meta name="twitter:title" content="Wallet Match & 13F Rebalance Calculator — CUSIP ($CUSIPS)" />
+  <meta name="twitter:description" content="Scan any Robinhood Chain wallet via read-only Multicall3 across 203 stock tokens, measure cosine similarity to billionaire 13F books, and compute exact USD rebalance legs." />
+  <meta name="twitter:image" content="https://cusipstocks.com/og-card.png" />
+  <link rel="canonical" href="https://cusipstocks.com/rebalance.html" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <!-- Live Institutional Session & Contract Strip -->
+  <div class="top-strip">
+    <div class="wrap strip-inner">
+      <div class="strip-left">
+        <span class="pulse-dot"></span>
+        <span class="mono-tag">CHAIN 4663 · 24/7 SETTLEMENT</span>
+        <span class="sep">|</span>
+        <span id="usSessionBadge" class="session-pill">US EQUITIES: CHECKING ET...</span>
+        <span class="sep hide-sm">|</span>
+        <span class="strip-stat hide-sm"><strong>95.8%</strong> Form 4s filed off-hours</span>
+        <span class="sep hide-md">|</span>
+        <span class="strip-stat hide-md"><strong>75.3%</strong> 10b5-1 noise stripped</span>
+      </div>
+      <div class="strip-right">
+        <span class="ca-label">$CUSIPS CA:</span>
+        <code id="headerCaText" class="ca-code">0x01db7687276EAe013F287edcb904960116462357</code>
+        <button id="copyCaBtn" class="btn-micro" type="button">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multi-Page Site Header -->
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="/" class="brand-lockup">
+        <img src="/mark.svg" alt="CUSIP mark" class="brand-mark" width="38" height="38" />
+        <div>
+          <div class="brand-title">CUSIP <span class="brand-ticker">$CUSIPS</span></div>
+          <div class="brand-sub">SEC EDGAR AI Indexer · Robinhood Chain</div>
+        </div>
+      </a>
+
+      <nav class="desk-tabs" aria-label="Primary Navigation">
+        <a href="/" class="tab-btn">Form 4 Wire</a>
+        <a href="/gap" class="tab-btn">24/7 Off-Hours</a>
+        <a href="/books" class="tab-btn">13F Fund Books</a>
+        <a href="/rebalance" class="tab-btn active">Wallet & Rebalance</a>
+        <a href="/directory" class="tab-btn">203 Stock Tokens</a>
+        <a href="/token" class="tab-btn">$CUSIPS & Registry</a>
+      </nav>
+
+      <div class="pro-wallet-box">
+        <a href="https://x.com/cusiprobinhood" target="_blank" rel="noopener" class="btn-outline">X · @cusiprobinhood</a>
+        <a href="https://github.com/Cusip-Robinhood/cusip" target="_blank" rel="noopener" class="btn-outline hide-sm">GitHub</a>
+        <div id="proBadge" class="pro-pill locked" title="Hold 500,000 $CUSIPS on Robinhood Chain (read-only balanceOf) to unlock <24h live EDGAR filings & full 13F rebalance execution.">
+          FREE · &gt;24H
+        </div>
+        <button type="button" id="verifyHolderBtn" class="btn-outline">Verify $CUSIPS</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Shared Non-Custodial Holder Verifier Drawer -->
+  <section id="holderDrawer" class="holder-drawer hidden">
+    <div class="wrap drawer-inner">
+      <div class="drawer-copy">
+        <h3>Non-Custodial <code>$CUSIPS</code> Pro Verification</h3>
+        <p>Paste any Robinhood Chain wallet or connect MetaMask/Rabby. We only call <code>balanceOf</code> on chain <code>4663</code> — zero approvals, zero signatures, zero custody. Holding <strong>&ge; 500,000 $CUSIPS</strong> (0.05% of supply) unlocks real-time <code>&lt;24h</code> Form 4 signals, full 15-leg 13F rebalance plans, and onchain CIK indexing requests.</p>
+      </div>
+      <div class="drawer-controls">
+        <input id="holderWalletInput" type="text" class="mono-input" placeholder="0x... Robinhood Chain wallet address" spellcheck="false" />
+        <button type="button" id="checkBalanceBtn" class="btn-primary">Check Balance</button>
+        <button type="button" id="connectWalletBtn" class="btn-secondary">Connect EVM</button>
+      </div>
+      <div id="holderCheckStatus" class="drawer-status"></div>
+    </div>
+  </section>
+
+  <section class="page-banner">
+    <div class="wrap">
+      <div class="eyebrow">READ-ONLY MULTICALL3 · ZERO SIGNATURES REQUIRED</div>
+      <h1>Wallet Similarity &amp; 13F Sleeve Rebalancer</h1>
+      <p class="hero-lead">Reads all 203 ERC-20 stock-token balances on Robinhood Chain in a single <code>Multicall3</code> read call, scores your wallet's cosine similarity against 6 institutional 13F books, and computes exact token-by-token <code>BUY / TRIM</code> deltas.</p>
+    </div>
+  </section>
+
+  <main class="wrap main-desk">
+    <div class="rebalance-controls">
+      <div class="field-group grow">
+        <label for="scanWalletInput">Robinhood Chain Wallet (Read-Only) or Preset Demo</label>
+        <div class="input-row">
+          <input id="scanWalletInput" type="text" class="mono-input" placeholder="0x... paste any wallet on chain 4663" spellcheck="false" />
+          <button type="button" id="runWalletScanBtn" class="btn-primary">Scan Chain 4663</button>
+          <button type="button" id="loadSampleWalletBtn" class="btn-secondary">Simulate $4.2K Tech Bag</button>
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="targetFundSelect">Target 13F Sleeve</label>
+        <select id="targetFundSelect" class="mono-select"></select>
+      </div>
+      <div class="field-group">
+        <label for="extraBudgetInput">Added Capital (USD)</label>
+        <input id="extraBudgetInput" type="number" class="mono-input w-sm" value="2500" min="0" step="100" />
+      </div>
+    </div>
+
+    <div id="walletScanStatus" class="scan-status"></div>
+    <div class="similarity-grid" id="similarityGrid"></div>
+
+    <div class="table-shell">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Action</th>
+            <th>CUSIP-9 / Token</th>
+            <th class="num">Target 13F Sleeve %</th>
+            <th class="num">Current USD</th>
+            <th class="num">Target USD</th>
+            <th class="num">Rebalance Delta</th>
+            <th>ERC-20 Contract</th>
+          </tr>
+        </thead>
+        <tbody id="rebalanceTableBody"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p><strong>CUSIP ($CUSIPS)</strong> indexes public SEC EDGAR disclosures (Form 4, Schedule 13D/13G, Form 13F-HR) and maps 9-character CUSIP identifiers to ERC-20 stock tokens on Robinhood Chain (4663). Read-only analytical software; not investment advice. Unaffiliated with the SEC, CUSIP Global Services, Robinhood, or any listed issuer.</p>
+      <div class="footer-links">
+        <a href="/">Wire</a>
+        <a href="/gap">Off-Hours</a>
+        <a href="/books">13F Books</a>
+        <a href="/rebalance">Rebalance</a>
+        <a href="/directory">Directory</a>
+        <a href="/token">$CUSIPS</a>
+        <a href="https://github.com/Cusip-Robinhood/cusip" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://x.com/cusiprobinhood" target="_blank" rel="noopener">X (@cusiprobinhood)</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

@@ -1,8 +1,8 @@
 // CUSIP ($CUSIPS) Frontend Terminal — SEC EDGAR AI Signal Desk, 24/7 Off-Hours Gap Scanner,
 // 13F Institutional Redline Books, Multicall3 Read-Only Wallet Rebalancer, and Onchain CusipRegistry Queue.
 
-const EMBEDDED_CUSIP_CA = "";
-const EMBEDDED_REGISTRY_ADDR = "";
+const EMBEDDED_CUSIP_CA = "0x01db7687276EAe013F287edcb904960116462357";
+const EMBEDDED_REGISTRY_ADDR = "0x413c216228d4559daf2af1723a73f16613d586a7";
 const CHAIN_ID_HEX = "0x1237"; // 4663 Robinhood Chain
 const MULTICALL3 = "0xcA11bde05977b3631167028862bE2a173976CA11";
 const PRO_THRESHOLD = 500_000;
@@ -65,11 +65,14 @@ function syncContractDisplays() {
   const reg = EMBEDDED_REGISTRY_ADDR || state.status?.contracts?.cusipRegistry || "";
   const displayCa = /^0x[a-fA-F0-9]{40}$/.test(ca) ? ca : "ANNOUNCING AT PONS LAUNCH";
 
-  document.getElementById("headerCaText").textContent = displayCa;
-  document.getElementById("regTokenCa").textContent = displayCa;
-  document.getElementById("regContractAddr").textContent = /^0x[a-fA-F0-9]{40}$/.test(reg)
-    ? reg
-    : "Ready for Sourcify deploy on chain 4663";
+  const hdr = document.getElementById("headerCaText");
+  if (hdr) hdr.textContent = displayCa;
+  const rTok = document.getElementById("regTokenCa");
+  if (rTok) rTok.textContent = displayCa;
+  const rAddr = document.getElementById("regContractAddr");
+  if (rAddr) {
+    rAddr.textContent = /^0x[a-fA-F0-9]{40}$/.test(reg) ? reg : "Ready for Sourcify deploy on chain 4663";
+  }
 }
 
 function syncProBadge() {
@@ -497,8 +500,9 @@ async function scanLiveChain4663Wallet(addr) {
 
 function renderDirectory() {
   const tbody = document.getElementById("directoryTableBody");
+  const snapEl = document.getElementById("regSnapshotRoot");
+  if (state.intel && snapEl) snapEl.textContent = state.intel.summary.snapshotRoot;
   if (!state.intel || !tbody) return;
-  document.getElementById("regSnapshotRoot").textContent = state.intel.summary.snapshotRoot;
 
   const q = state.dirQuery.trim().toUpperCase();
   let rows = state.intel.equities;
@@ -575,17 +579,8 @@ function switchView(viewName) {
 }
 
 async function init() {
-  // Tab routing
-  document.querySelectorAll(".tab-btn").forEach((btn) => {
-    btn.addEventListener("click", () => switchView(btn.dataset.view));
-  });
-  const initialHash = location.hash.replace("#", "");
-  if (["wire", "gap", "books", "rebalance", "registry"].includes(initialHash)) {
-    switchView(initialHash);
-  }
-
   // Copy CA
-  document.getElementById("copyCaBtn").addEventListener("click", async () => {
+  document.getElementById("copyCaBtn")?.addEventListener("click", async () => {
     const text = document.getElementById("headerCaText").textContent.trim();
     await navigator.clipboard.writeText(text).catch(() => {});
     const btn = document.getElementById("copyCaBtn");
@@ -594,18 +589,18 @@ async function init() {
   });
 
   // Holder Drawer
-  const toggleDrawer = () => document.getElementById("holderDrawer").classList.toggle("hidden");
-  document.getElementById("verifyHolderBtn").addEventListener("click", toggleDrawer);
-  document.getElementById("bannerUnlockBtn").addEventListener("click", () => {
-    document.getElementById("holderDrawer").classList.remove("hidden");
-    document.getElementById("holderWalletInput").focus();
+  const toggleDrawer = () => document.getElementById("holderDrawer")?.classList.toggle("hidden");
+  document.getElementById("verifyHolderBtn")?.addEventListener("click", toggleDrawer);
+  document.getElementById("bannerUnlockBtn")?.addEventListener("click", () => {
+    document.getElementById("holderDrawer")?.classList.remove("hidden");
+    document.getElementById("holderWalletInput")?.focus();
   });
 
-  document.getElementById("checkBalanceBtn").addEventListener("click", () => {
+  document.getElementById("checkBalanceBtn")?.addEventListener("click", () => {
     verifyHolderAddress(document.getElementById("holderWalletInput").value);
   });
 
-  document.getElementById("connectWalletBtn").addEventListener("click", async () => {
+  document.getElementById("connectWalletBtn")?.addEventListener("click", async () => {
     if (!window.ethereum) {
       document.getElementById("holderCheckStatus").textContent = "No injected EVM wallet detected — paste any 0x address above (no signature needed).";
       return;
@@ -617,7 +612,7 @@ async function init() {
     }
   });
 
-  // Wire filters
+  // Wire filters (index.html)
   document.querySelectorAll("#wireFilterGroup .pill").forEach((pill) => {
     pill.addEventListener("click", () => {
       document.querySelectorAll("#wireFilterGroup .pill").forEach((p) => p.classList.remove("active"));
@@ -626,31 +621,31 @@ async function init() {
       renderWireTable();
     });
   });
-  document.getElementById("wireSearch").addEventListener("input", (e) => {
+  document.getElementById("wireSearch")?.addEventListener("input", (e) => {
     state.wireQuery = e.target.value;
     renderWireTable();
   });
 
-  // Rebalance controls
-  document.getElementById("targetFundSelect").addEventListener("change", renderRebalanceView);
-  document.getElementById("extraBudgetInput").addEventListener("input", renderRebalanceView);
-  document.getElementById("runWalletScanBtn").addEventListener("click", () => {
+  // Rebalance controls (rebalance.html)
+  document.getElementById("targetFundSelect")?.addEventListener("change", renderRebalanceView);
+  document.getElementById("extraBudgetInput")?.addEventListener("input", renderRebalanceView);
+  document.getElementById("runWalletScanBtn")?.addEventListener("click", () => {
     scanLiveChain4663Wallet(document.getElementById("scanWalletInput").value);
   });
-  document.getElementById("loadSampleWalletBtn").addEventListener("click", () => {
+  document.getElementById("loadSampleWalletBtn")?.addEventListener("click", () => {
     state.scannedHoldingsUsd = { NVDA: 1450, AMZN: 1120, MU: 940, INTC: 690 };
     state.scannedLabel = "Demo Portfolio ($4,200 across NVDA, AMZN, MU, INTC)";
     renderRebalanceView();
   });
 
-  // Directory search
-  document.getElementById("dirSearchInput").addEventListener("input", (e) => {
+  // Directory search (directory.html)
+  document.getElementById("dirSearchInput")?.addEventListener("input", (e) => {
     state.dirQuery = e.target.value;
     renderDirectory();
   });
 
-  // Onchain CusipRegistry.requestCikIndex(uint40 cik, bool is13F, string entityName)
-  document.getElementById("cikRequestForm").addEventListener("submit", async (e) => {
+  // Onchain CusipRegistry.requestCikIndex(uint40 cik, bool is13F, string entityName) (token.html)
+  document.getElementById("cikRequestForm")?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const statusEl = document.getElementById("cikTxStatus");
     const regAddr = EMBEDDED_REGISTRY_ADDR || state.status?.contracts?.cusipRegistry || "";
@@ -716,11 +711,11 @@ async function init() {
 
   syncContractDisplays();
   syncProBadge();
-  renderWireTable();
-  renderGapScanner();
-  renderFundBooks();
-  renderRebalanceView();
-  renderDirectory();
+  if (document.getElementById("wireTableBody")) renderWireTable();
+  if (document.getElementById("gapTableBody")) renderGapScanner();
+  if (document.getElementById("fundHoldingsBody")) renderFundBooks();
+  if (document.getElementById("rebalanceTableBody")) renderRebalanceView();
+  if (document.getElementById("directoryTableBody") || document.getElementById("regSnapshotRoot")) renderDirectory();
 }
 
 init();

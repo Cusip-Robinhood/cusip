@@ -1,6 +1,9 @@
 # CUSIP (`$CUSIPS`) — AI SEC EDGAR Indexer on Robinhood Chain
 
+- **`$CUSIPS` Contract (Robinhood Chain, 4663):** [`0x01db7687276EAe013F287edcb904960116462357`](https://ponsfamily.com/launchpad/0x01db7687276EAe013F287edcb904960116462357)
+
 - **Terminal:** https://cusipstocks.com
+- **`CusipRegistry` Contract (Robinhood Chain, 4663):** [`0x413c216228d4559daf2af1723a73f16613d586a7`](https://robinhoodchain.blockscout.com/address/0x413c216228d4559daf2af1723a73f16613d586a7) · [Sourcify `exact_match`](https://repo.sourcify.dev/4663/0x413c216228d4559daf2af1723a73f16613d586a7)
 - **X:** https://x.com/cusiprobinhood
 - **Source:** https://github.com/Cusip-Robinhood/cusip
 

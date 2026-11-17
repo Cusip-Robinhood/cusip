@@ -380,6 +380,10 @@ export default {
       }
 
       if (env.ASSETS) {
+        if (["/gap", "/books", "/rebalance", "/directory", "/token"].includes(p)) {
+          const rewritten = new URL(p + ".html", req.url);
+          return env.ASSETS.fetch(new Request(rewritten, req));
+        }
         return env.ASSETS.fetch(req);
       }
       return json({ error: "Not found" }, 404);

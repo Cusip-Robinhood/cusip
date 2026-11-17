@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" data-page="gap">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>24/7 Off-Hours SEC EDGAR Gap Scanner — CUSIP ($CUSIPS)</title>
+  <meta name="description" content="252 of 263 recent Form 4 filings dropped after NYSE/Nasdaq closed. Inspect off-hours executive buys & multi-insider Cluster Buys matched to 24/7 stock tokens on Robinhood Chain." />
+  <meta property="og:title" content="24/7 Off-Hours SEC EDGAR Gap Scanner — CUSIP ($CUSIPS)" />
+  <meta property="og:description" content="252 of 263 recent Form 4 filings dropped after NYSE/Nasdaq closed. Inspect off-hours executive buys & multi-insider Cluster Buys matched to 24/7 stock tokens on Robinhood Chain." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://cusipstocks.com/gap.html" />
+  <meta property="og:image" content="https://cusipstocks.com/og-card.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@cusiprobinhood" />
+  <meta name="twitter:title" content="24/7 Off-Hours SEC EDGAR Gap Scanner — CUSIP ($CUSIPS)" />
+  <meta name="twitter:description" content="252 of 263 recent Form 4 filings dropped after NYSE/Nasdaq closed. Inspect off-hours executive buys & multi-insider Cluster Buys matched to 24/7 stock tokens on Robinhood Chain." />
+  <meta name="twitter:image" content="https://cusipstocks.com/og-card.png" />
+  <link rel="canonical" href="https://cusipstocks.com/gap.html" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <!-- Live Institutional Session & Contract Strip -->
+  <div class="top-strip">
+    <div class="wrap strip-inner">
+      <div class="strip-left">
+        <span class="pulse-dot"></span>
+        <span class="mono-tag">CHAIN 4663 · 24/7 SETTLEMENT</span>
+        <span class="sep">|</span>
+        <span id="usSessionBadge" class="session-pill">US EQUITIES: CHECKING ET...</span>
+        <span class="sep hide-sm">|</span>
+        <span class="strip-stat hide-sm"><strong>95.8%</strong> Form 4s filed off-hours</span>
+        <span class="sep hide-md">|</span>
+        <span class="strip-stat hide-md"><strong>75.3%</strong> 10b5-1 noise stripped</span>
+      </div>
+      <div class="strip-right">
+        <span class="ca-label">$CUSIPS CA:</span>
+        <code id="headerCaText" class="ca-code">0x01db7687276EAe013F287edcb904960116462357</code>
+        <button id="copyCaBtn" class="btn-micro" type="button">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multi-Page Site Header -->
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="/" class="brand-lockup">
+        <img src="/mark.svg" alt="CUSIP mark" class="brand-mark" width="38" height="38" />
+        <div>
+          <div class="brand-title">CUSIP <span class="brand-ticker">$CUSIPS</span></div>
+          <div class="brand-sub">SEC EDGAR AI Indexer · Robinhood Chain</div>
+        </div>
+      </a>
+
+      <nav class="desk-tabs" aria-label="Primary Navigation">
+        <a href="/" class="tab-btn">Form 4 Wire</a>
+        <a href="/gap" class="tab-btn active">24/7 Off-Hours</a>
+        <a href="/books" class="tab-btn">13F Fund Books</a>
+        <a href="/rebalance" class="tab-btn">Wallet & Rebalance</a>
+        <a href="/directory" class="tab-btn">203 Stock Tokens</a>
+        <a href="/token" class="tab-btn">$CUSIPS & Registry</a>
+      </nav>
+
+      <div class="pro-wallet-box">
+        <a href="https://x.com/cusiprobinhood" target="_blank" rel="noopener" class="btn-outline">X · @cusiprobinhood</a>
+        <a href="https://github.com/Cusip-Robinhood/cusip" target="_blank" rel="noopener" class="btn-outline hide-sm">GitHub</a>
+        <div id="proBadge" class="pro-pill locked" title="Hold 500,000 $CUSIPS on Robinhood Chain (read-only balanceOf) to unlock <24h live EDGAR filings & full 13F rebalance execution.">
+          FREE · &gt;24H
+        </div>
+        <button type="button" id="verifyHolderBtn" class="btn-outline">Verify $CUSIPS</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Shared Non-Custodial Holder Verifier Drawer -->
+  <section id="holderDrawer" class="holder-drawer hidden">
+    <div class="wrap drawer-inner">
+      <div class="drawer-copy">
+        <h3>Non-Custodial <code>$CUSIPS</code> Pro Verification</h3>
+        <p>Paste any Robinhood Chain wallet or connect MetaMask/Rabby. We only call <code>balanceOf</code> on chain <code>4663</code> — zero approvals, zero signatures, zero custody. Holding <strong>&ge; 500,000 $CUSIPS</strong> (0.05% of supply) unlocks real-time <code>&lt;24h</code> Form 4 signals, full 15-leg 13F rebalance plans, and onchain CIK indexing requests.</p>
+      </div>
+      <div class="drawer-controls">
+        <input id="holderWalletInput" type="text" class="mono-input" placeholder="0x... Robinhood Chain wallet address" spellcheck="false" />
+        <button type="button" id="checkBalanceBtn" class="btn-primary">Check Balance</button>
+        <button type="button" id="connectWalletBtn" class="btn-secondary">Connect EVM</button>
+      </div>
+      <div id="holderCheckStatus" class="drawer-status"></div>
+    </div>
+  </section>
+
+  <section class="page-banner">
+    <div class="wrap banner-flex">
+      <div>
+        <div class="eyebrow">STRUCTURAL VENUE EDGE · AFTER 16:00 ET</div>
+        <h1>24/7 Off-Hours EDGAR Arbitrage Window</h1>
+        <p class="hero-lead">Corporate legal desks submit Form 4 and Schedule 13D disclosures after the <code>16:00 ET</code> closing bell. Traditional equity venues freeze until <code>09:30 ET</code> (or Monday morning), while Robinhood Chain ERC-20 stock tokens settle spot swaps 24/7.</p>
+      </div>
+      <div class="gap-callout">
+        <span class="mono-tag">EMPIRICAL WINDOW</span>
+        <strong>252 of 263 (95.8%)</strong> recent Form 4 filings hit SEC EDGAR outside regular US market hours.
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap main-desk">
+    <h2 class="sec-h2">Multi-Executive Cluster Buys (14-Day Window)</h2>
+    <div class="cluster-cards" id="clusterSpotlight"></div>
+
+    <h2 class="sec-h2">Off-Hours Discretionary Filings (Nasdaq Closed &middot; Chain 4663 Open)</h2>
+    <div class="table-shell">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Accepted (ET)</th>
+            <th>Nasdaq State</th>
+            <th>Signal</th>
+            <th>CUSIP-9 / Ticker</th>
+            <th>Executive &amp; Role</th>
+            <th class="num">Open-Market USD</th>
+            <th>24/7 Onchain Contract</th>
+          </tr>
+        </thead>
+        <tbody id="gapTableBody"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p><strong>CUSIP ($CUSIPS)</strong> indexes public SEC EDGAR disclosures (Form 4, Schedule 13D/13G, Form 13F-HR) and maps 9-character CUSIP identifiers to ERC-20 stock tokens on Robinhood Chain (4663). Read-only analytical software; not investment advice. Unaffiliated with the SEC, CUSIP Global Services, Robinhood, or any listed issuer.</p>
+      <div class="footer-links">
+        <a href="/">Wire</a>
+        <a href="/gap">Off-Hours</a>
+        <a href="/books">13F Books</a>
+        <a href="/rebalance">Rebalance</a>
+        <a href="/directory">Directory</a>
+        <a href="/token">$CUSIPS</a>
+        <a href="https://github.com/Cusip-Robinhood/cusip" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://x.com/cusiprobinhood" target="_blank" rel="noopener">X (@cusiprobinhood)</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
